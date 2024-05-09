@@ -67,3 +67,16 @@ class Ligonine:
         self.cursor.execute("INSERT INTO pacientai (vardas, pavarde, gimimo_data, lytis, el_pastas, gydytojo_id) VALUES (?, ?, ?, ?, ?, ?)", (vardas, pavarde, gimimo_data, lytis, el_pastas, gydytojo_id))
         self.conn.commit()
         return pacientas
+
+    def prideti_susitikima(self, paciento_id, gydytojo_id, susitikimo_data, paskirtis, komentarai ):
+        susitikimas = Susitikimas(paciento_id, gydytojo_id, susitikimo_data, paskirtis, komentarai)
+        self.cursor.execute("INSERT INTO susitikimai (paciento_id, gydytojo_id, susitikimo_data, paskirtis, komentarai) VALUES (?, ?, ?, ?, ?)", (paciento_id, gydytojo_id, susitikimo_data, paskirtis, komentarai))
+        self.conn.commit()
+        return susitikimas
+    
+    def perziureti_irasus(self, lentele):
+        self.cursor.execute("SELECT * FROM ?", (lentele,))
+        rezultatu_sarasas = self.cursor.fetchall()
+        print('Irasai pagal jusu uzklausa: ')
+        for rezultatas in rezultatu_sarasas:
+            print(rezultatas)
