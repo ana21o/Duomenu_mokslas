@@ -198,6 +198,7 @@ print('-----Po trinimo-----')
 vyskupija.istrinti_baznycia('Gedimino pr. 1')
 vyskupija.spausdinam_baznycia()
 
+# sukurti metoda, kuris leis atnaujinti informacija vienai baznyciai, naudokite input
 print('---atnaujinta--')
 vyskupija.atnaujinti_baznycia()
 
@@ -207,6 +208,5 @@ vyskupija.atnaujinti_baznycia()
 
 
 
-# sukurti metoda, kuris leis atnaujinti informacija vienai baznyciai, naudokite input
 
 
