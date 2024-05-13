@@ -161,14 +161,33 @@ class Autoservisas:
 # papildomos užduotys, jas iškviesti reikia terminale nurodant veiksmo numerį/įvedant skaičių:
 
 # patobulinkite funkciją, kuri prieš pridedant remontą patikrintų ar tuo metu, kai klientas pageidauja remontuoti automobilį yra laisvų automechanikų
-    def ar_laisvas_mechanikas(self, darbo_pradzia, darbo_pabaiga):
-        self.cursor.execute('SELECT COUNT(*) FROM remontas WHERE (darbo_pradzia BETWEEN ? AND ?) OR (darbo_pabaiga BETWEEN ? AND ?)', (darbo_pradzia, darbo_pabaiga, darbo_pradzia, darbo_pabaiga))
-        laisvu_mechaniku_skaicius = self.cursor.fetchone()[0]
-        if laisvu_mechaniku_skaicius > 0:
-            return True
-        else:
-            return False
+    def ar_laisvas_mechanikas(self, darbo_pradzia, darbo_pabaiga, mechaniko_id):
+        # self.cursor.execute(f"SELECT * FROM remontas WHERE mechaniko_id = {mechaniko_id} AND (darbo_pradzia BETWEEN '{darbo_pradzia}' AND '{darbo_pabaiga}') AND (darbo_pabaiga BETWEEN '{darbo_pradzia}' AND '{darbo_pabaiga}')")
+        self.cursor.execute(f"SELECT mechaniko_id FROM remontas WHERE mechaniko_id NOT IN (SELECT mechaniko_id FROM remontas WHERE darbo_pradzia <= '{darbo_pabaiga}' AND darbo_pabaiga >= '{darbo_pradzia}')")
+        laisvu_mechaniku_skaicius = self.cursor.fetchall()
+        return laisvu_mechaniku_skaicius
 
 # sukurkite funkciją, kuri apskaičiuotų, kiek vienas klientas yra mums sumokėjęs iš viso už visų savo automobilių visus remontus
+
+    # def kiek_sumokejo(self, kliento_id):
+    #     self.cursor.execute('SELECT valstybinis_numeris FROM automobiliai WHERE kliento_id = ?', (kliento_id,))
+    #     automobiliai = self.cursor.fetchall()
+
+    
 # sukurkite funkciją, kuri apskaičiuotų, kiek vienas klientas yra mums sumokėjęs iš viso už vieno konkretaus automobilio remontą
+    def kiek_uz_viena_automobili(self, kliento_id, automobilio_id):
+        self.cursor.execute('SELECT SUM(darbo_kaina) FROM remontas WHERE kliento_id = ? AND automobilio_id = ?', (kliento_id, automobilio_id))
+        suma = self.cursor.fetchone()[0]
+        return suma if suma else 0
+
 # sukurkite funkciją, kuri apskaičiuotų kiek uždirbo konkretus mechanikas X
+
+    def kiek_uzdirbo_mechanikas(self, mechaniko_id):
+        self.cursor.execute('SELECT SUM(darbo_kaina) FROM remontas WHERE mechaniko_id =?', (mechaniko_id,))
+        suma_remonto_kainu = self.cursor.fetchone()[0]
+
+        mechaniko_info = self.gauti_mechaniko_info(mechaniko_id)
+        valandinis_atlyginimas =mechaniko_info.valandinis_atlyginimas
+
+        uzdarbis = suma_remonto_kainu * valandinis_atlyginimas
+        return uzdarbis if uzdarbis else 0

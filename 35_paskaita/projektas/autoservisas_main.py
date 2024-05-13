@@ -12,6 +12,7 @@ def main():
         print('4 - prideti automobili') 
         print('5 - prideti remonta')
         print('6 - perziureti duomenis')
+        print('7 - peržiūrėti, kiek klientas sumokėjo už visų savo automobilių visus remontus')
 
 
         pasirinkimas = input('Iveskite pasirinkimo numeri: ')
@@ -52,7 +53,7 @@ def main():
             darbo_pabaiga = input('Darbo pabaigos laikas (YYYY-MM-DD HH:MM:SS): ')
             # uzimtas laikas ar laisvas
             remonto_kategorija = input('Remonto kategorija: ')
-            if autoservisas.ar_laisvas_mechanikas(darbo_pradzia, darbo_pabaiga):
+            if autoservisas.ar_laisvas_mechanikas(darbo_pradzia, darbo_pabaiga, kliento_id):
                 remontas = autoservisas.prideti_remonta(kliento_id, mechaniko_id, darbo_pradzia, darbo_pabaiga, remonto_kategorija)
                 print(f"Remontas {remontas.remonto_kategorija} buvo pridetas")
             else:
